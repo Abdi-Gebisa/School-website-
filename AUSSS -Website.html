@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+</head>
+
+<body>
+  mkdir backend
+  cd backend
+  npm init -y
+  npm install express cors
+  // backend/server.js
+const express = require('express');
+const cors = require('cors'); // For allowing cross-origin requests from frontend
+const app = express();
+const PORT = 5000; // Backend will run on port 5000
+
+// Middleware
+app.use(cors()); // Enable CORS for all routes
+app.use(express.json()); // To parse JSON request bodies
+
+// Mock Data for Courses
+const courses = [
+    { id: 1, title: "Web Development Fundamentals", duration: "3 Months", desc: "Learn HTML, CSS, JavaScript, and responsive design principles.", instructor: "Dr. Ahmed Ali" },
+    { id: 2, title: "Introduction to Data Science with Python", duration: "4 Months", desc: "Master Python programming, data analysis, visualization, and basic machine learning.", instructor: "Prof. Aisha Hassan" },
+    { id: 3, title: "Graphic Design & UI/UX Basics", duration: "2 Months", desc: "Explore design principles, Photoshop, Figma, and create stunning user interfaces.", instructor: "Ms. Layla Abdi" },
+    { id: 4, title: "Mobile App Development (React Native)", duration: "5 Months", desc: "Build cross-platform mobile applications for Android and iOS using React Native.", instructor: "Mr. Omar Farah" }
+];
+
+// API Routes
+app.get('/api/courses', (req, res) => {
+    res.json(courses); // Return the courses data as JSON
+});
+
+app.post('/api/contact', (req, res) => {
+    const { name, email, message } = req.body;
+    if (!name || !email || !message) {
+        return res.status(400).send({ success: false, msg: "All fields are required." });
+    }
+    console.log(`--- New Contact Message ---`);
+    console.log(`Name: ${name}`);
+    console.log(`Email: ${email}`);
+    console.log(`Message: ${message}`);
+    console.log(`---------------------------\n`);
+    // In a real app, you would save this to a database or send an email.
+    res.status(200).send({ success: true, msg: "Message received! We will get back to you shortly." });
+});
+
+// Start the server
+app.listen(PORT, () => console.log(`Backend Server running on http://localhost:${PORT}`));
+    node server.js
+    npx create-react-app frontend
+    cd frontend
+    npm install react-router-dom
+    npm install -D tailwindcss postcss autoprefixer
+    npx tailwindcss init -p
+    // frontend/tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}", // This line tells Tailwind where to find your React components
+    "./public/index.html",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+/* frontend/src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can add your own custom CSS here if needed */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+// frontend/src/components/Navbar.jsx
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+export default function Navbar() {
+  return (
+    <nav className="bg-blue-700 p-4 text-white shadow-md">
+      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
+        <Link to="/" className="text-3xl font-bold mb-2 md:mb-0">AUSSS</Link>
+        <div className="flex flex-wrap justify-center md:space-x-6 space-x-3 text-lg">
+          <Link to="/" className="hover:text-blue-200 transition-colors">Home</Link>
+          <Link to="/about" className="hover:text-blue-200 transition-colors">About</Link>
+          <Link to="/courses" className="hover:text-blue-200 transition-colors">Courses</Link>
+          <Link to="/contact" className="hover:text-blue-200 transition-colors">Contact Us</Link>
+        </div>
+      </div>
+    </nav>
+  );
+}
+// frontend/src/components/Footer.jsx
+import React from 'react';
+
+export default function Footer() {
+  return (
+    <footer className="bg-gray-800 text-white p-6 text-center mt-12">
+      <div className="container mx-auto">
+        <p className="text-lg mb-2">© {new Date().getFullYear()} African Union Somali Students' Union (AUSSS). All rights reserved.</p>
+        <p className="text-sm">Empowering students, building futures.</p>
+      </div>
+    </footer>
+  );
+}
+// frontend/src/pages/Home.jsx
+import React from 'react';
+
+export default function Home() {
+  return (
+    <div className="p-10 text-center bg-gray-50 min-h-[calc(100vh-160px)] flex flex-col justify-center items-center">
+      <h1 className="text-5xl font-extrabold text-blue-800 mb-6">
+        Welcome to AUSSS
+      </h1>
+      <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
+        African Union Somali Students' Union (AUSSS) is dedicated to empowering Somali students through education, community building, and leadership development. Join us in shaping a brighter future.
+      </p>
+      <button className="mt-10 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg transform transition duration-300 hover:scale-105">
+        Explore Our Programs
+      </button>
+    </div>
+  );
+}
+// frontend/src/pages/About.jsx
+import React from 'react';
+
+export default function About() {
+  return (
+    <div className="p-10 max-w-4xl mx-auto bg-white shadow-lg rounded-lg my-12">
+      <h2 className="text-4xl font-bold text-blue-800 mb-8 text-center">About AUSSS</h2>
+      
+      <section className="mb-8">
+        <h3 className="text-2xl font-semibold text-blue-700 mb-4">Our Mission</h3>
+        <p className="text-gray-700 leading-relaxed text-lg">
+          The African Union Somali Students' Union (AUSSS) is committed to fostering academic excellence, cultural understanding, and professional growth among Somali students globally. We provide a supportive network, resources, and opportunities to help our members achieve their full potential and contribute positively to society.
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h3 className="text-2xl font-semibold text-blue-700 mb-4">Our Vision</h3>
+        <p className="text-gray-700 leading-relaxed text-lg">
+          To be the leading student organization empowering a new generation of Somali leaders, innovators, and change-makers who will drive sustainable development and peace in Somalia and beyond.
+        </p>
+      </section>
+
+      <section>
+        <h3 className="text-2xl font-semibold text-blue-700 mb-4">What We Do</h3>
+        <ul className="list-disc list-inside text-gray-700 leading-relaxed text-lg space-y-2">
+          <li>Provide academic support and mentorship programs.</li>
+          <li>Organize workshops, seminars, and networking events.</li>
+          <li>Promote Somali culture and heritage.</li>
+          <li>Advocate for student welfare and opportunities.</li>
+          <li>Facilitate leadership and community service initiatives.</li>
+        </ul>
+      </section>
+    </div>
+  );
+}
+// frontend/src/pages/Courses.jsx
+import React, { useEffect, useState } from 'react';
+
+export default function Courses() {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        // Ensure your backend server is running on http://localhost:5000
+        const response = await fetch('http://localhost:5000/api/courses'); 
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setCourses(data);
+      } catch (e) {
+        console.error("Failed to fetch courses:", e);
+        setError("Failed to load courses. Please ensure the backend server is running.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  if (loading) return <div className="text-center p-10 text-xl">Loading courses...</div>;
+  if (error) return <div className="text-center p-10 text-red-600 text-xl">{error}</div>;
+  if (courses.length === 0) return <div className="text-center p-10 text-xl">No courses available at the moment.</div>;
+
+
+  return (
+    <div className="p-10 max-w-6xl mx-auto my-12 bg-white shadow-lg rounded-lg">
+      <h2 className="text-4xl font-bold text-blue-800 mb-10 text-center">Our Courses & Programs</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {courses.map(course => (
+          <div key={course.id} className="border border-gray-200 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 bg-white">
+            <h3 className="text-2xl font-bold text-blue-700 mb-2">{course.title}</h3>
+            <p className="text-md text-gray-600 mb-3"><span className="font-semibold">Duration:</span> {course.duration}</p>
+            <p className="text-gray-700 leading-relaxed mb-4">{course.desc}</p>
+            <p className="text-sm text-gray-500 italic">Instructor: {course.instructor}</p>
+            <button className="mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-5 rounded-full text-sm transition-colors">
+              Learn More
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+// frontend/src/pages/Contact.jsx
+import React, { useState } from 'react';
+
+export default function Contact() {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState(''); // 'success', 'error', 'sending', ''
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('sending');
+    try {
+      // Ensure your backend server is running on http://localhost:5000
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' }); // Clear form
+      } else {
+        setStatus(error: ${data.msg || 'Something went wrong.'});
+      }
+    } catch (error) {
+      console.error("Failed to send message:", error);
+      setStatus('error: Could not connect to the server. Please check your network and ensure the backend is running.');
+    }
+  };
+
+  return (
+    <div className="p-10 max-w-lg mx-auto my-12 bg-white shadow-lg rounded-lg">
+      <h2 className="text-4xl font-bold text-blue-800 mb-8 text-center">Contact Us</h2>
+      <p className="text-gray-700 text-lg text-center mb-6">
+        Have questions or want to get involved? Send us a message!
+      </p>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        <div>
+          <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Your Name"
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="your.email@example.com"
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="message" className="block text-gray-700 text-sm font-bold mb-2">Message:</label>
+          <textarea
+            id="message"
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            rows="6"
+            className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            placeholder="Your message to AUSSS..."
+            required
+          ></textarea>
+        </div>
+        <button
+          type="submit"
+          className={bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-colors ${status === 'sending' ? 'opacity-70 cursor-not-allowed' : ''}}
+          disabled={status === 'sending'}
+        >
+          {status === 'sending' ? 'Sending...' : 'Send Message'}
+        </button>
+        {status === 'success' && <p className="text-green-600 text-center mt-3 font-semibold">Message sent successfully!</p>}
+        {status.startsWith('error') && <p className="text-red-600 text-center mt-3 font-semibold">{status}</p>}
+      </form>
+    </div>
+  );
+}
+// frontend/src/App.js
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Courses from './pages/Courses';
+
+function App() {
+  return (
+    <Router>
+      <div className="flex flex-col min-h-screen"> {/* Flex container for sticky footer */}
+        <Navbar />
+        <main className="flex-grow"> {/* Main content area */}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/courses" element={<Courses />} />
+            <Route path="/contact" element={<Contact />} />
+            {/* Add a 404 page if you want */}
+            {/* <Route path="*" element={<NotFound />} /> */}
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+    npm start
+    
+</body>
+
+</html>
